@@ -1,5 +1,6 @@
-use js_sys::{Array, Uint8ClampedArray, WebAssembly};
+use js_sys::Array;
 use wasm_bindgen::prelude::*;
+use web_sys::OffscreenCanvasRenderingContext2d;
 
 static mut NAND_CALLS: u64 = 0;
 #[allow(non_snake_case)]
@@ -186,38 +187,16 @@ mod screen {
     use super::*;
 
     #[wasm_bindgen]
-    extern "C" {
-        pub type ImageData;
-
-        #[wasm_bindgen(constructor, catch)]
-        fn new(data: &Uint8ClampedArray, width: f64, height: f64) -> Result<ImageData, JsValue>;
-    }
-
-    #[wasm_bindgen]
-    pub fn render() -> ImageData {
-        let mut pixel_data: [u8; 512 * 256 * 4] = [0; 512 * 256 * 4];
+    pub fn render(ctx: OffscreenCanvasRenderingContext2d) {
+        ctx.clear_rect(0.0, 0.0, 512.0, 256.0);
         for (i, &word16) in unsafe { SCREEN_MEMORY.iter().enumerate() } {
             let y = i / 32;
             for j in 0..16 {
                 if nbit16(word16, j) {
                     let x = ((i * 16) + j as usize) % 512;
-                    let index = y * 512 + x;
-                    unsafe {
-                        (pixel_data.as_mut_ptr() as *mut u32)
-                            .add(index)
-                            .write(4286183345);
-                    }
+                    ctx.fill_rect(x as f64, y as f64, 1.0, 1.0);
                 }
             }
         }
-        let base = pixel_data.as_ptr() as u32;
-        let len = pixel_data.len() as u32;
-        let mem = Uint8ClampedArray::new(
-            &wasm_bindgen::memory()
-                .unchecked_into::<WebAssembly::Memory>()
-                .buffer(),
-        )
-        .slice(base, base + len);
-        ImageData::new(&mem, 512.0, 256.0).unwrap()
     }
 }
