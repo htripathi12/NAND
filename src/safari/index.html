@@ -1,0 +1,17 @@
+<canvas style="border: 15px solid red; width: 50vw;" width="512" height="256"></canvas>
+<script>
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.transferControlToOffscreen();
+    const worker = new Worker('worker.js');
+    worker.postMessage(ctx, [ctx]);
+    // let t;
+    // self.onresize = () => {
+    //     clearTimeout(t);
+    //     t = setTimeout(() => {
+    //         worker.postMessage(undefined);
+    //     }, 200);
+    // }
+    self.onresize = () => {
+        worker.postMessage(undefined);
+    }
+</script>
