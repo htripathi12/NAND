@@ -4,13 +4,6 @@
     const ctx = canvas.transferControlToOffscreen();
     const worker = new Worker('worker.js');
     worker.postMessage(ctx, [ctx]);
-    // let t;
-    // self.onresize = () => {
-    //     clearTimeout(t);
-    //     t = setTimeout(() => {
-    //         worker.postMessage(undefined);
-    //     }, 200);
-    // }
     self.onresize = () => {
         worker.postMessage(undefined);
     }

@@ -1,7 +1,7 @@
-self.onmessage = function (e) {
+self.onmessage = (e) => {
   let ctx = e.data.getContext("2d");
   self.onmessage = () => {
-    const imageData = ctx.createImageData(212, 256);
+    const imageData = ctx.createImageData(512, 256);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
       data[i] = 0;
@@ -19,6 +19,5 @@ self.onmessage = function (e) {
       }
     }
     ctx.putImageData(imageData, 0, 0);
-    // ctx.commit();
   };
 };
