@@ -1,0 +1,8 @@
+<script>
+  new Worker('worker1.js').onmessage = (e) => {
+    if (e.data === 'worker1 works')
+      document.write("first worker raf works<br>");
+    else if (e.data === 'worker2 works')
+      document.write("nested worker raf works");
+  }
+</script>
