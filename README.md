@@ -47,6 +47,8 @@ TODO
 
 TODO
 
+i love nand :D
+
 ### Undefined behavior and caveats
 
 TODO
